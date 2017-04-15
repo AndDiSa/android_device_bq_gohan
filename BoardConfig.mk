@@ -16,50 +16,106 @@
 
 LOCAL_PATH := device/bq/gohan
 
+# Headers
 TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 
-# Architecture
-TARGET_ARCH := arm
-TARGET_ARCH_VARIANT := armv7-a-neon
-TARGET_CPU_ABI := armeabi-v7a
-TARGET_CPU_ABI2 := armeabi
-TARGET_CPU_VARIANT := cortex-a53
-
 # Board
-TARGET_BOARD_PLATFORM := msm8952
+TARGET_BOARD_PLATFORM := msm8976
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno510
 
+# Architecture
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+TARGET_CPU_ABI2 := 
+TARGET_CPU_VARIANT := cortex-a53
+
+TARGET_2ND_ARCH := arm
+TARGET_2ND_ARCH_VARIANT := armv7-a-neon
+TARGET_2ND_CPU_ABI := armeabi-v7a
+TARGET_2ND_CPU_ABI2 := armeabi
+TARGET_2ND_CPU_VARIANT := cortex-a53.a57
+
+TARGET_USES_64_BIT_BINDER := true
+
+
 # Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := msm8952
 TARGET_NO_BOOTLOADER := true
+TARGET_BOOTLOADER_BOARD_NAME := MSM8976
 
 # Kernel
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1  androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 earlyprintk androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x80000000
-BOARD_KERNEL_IMAGE_NAME := zImage-dtb
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
-BOARD_RAMDISK_OFFSET := 0x01000000
-BOARD_MKBOOTIMG_ARGS := --ramdisk_offset BOARD_RAMDISK_OFFSET --tags_offset BOARD_KERNEL_TAGS_OFFSET
-TARGET_KERNEL_ARCH := arm
+BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
+
+BOARD_RAMDISK_OFFSET := 0x02000000
+
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_APPEND_DTB := true
-TARGET_KERNEL_CONFIG := cyanogenmod_gohan_defconfig
-TARGET_KERNEL_SOURCE := kernel/bq/msm8976
+
+TARGET_KERNEL_SOURCE := kernel/bq/gohan
+TARGET_KERNEL_CONFIG := gohan_defconfig
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+
+BOARD_DTBTOOL_ARGS := -2
+
+#ENABLE_CPUSETS := true
+
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_APPEND_DTB := true
+KERNEL_MODULES_OUT := $(TARGET_OUT)/lib/modules
+
+#KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-eabi-4.9/bin
+#KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-linux-androideabi-4.9/bin/
+
+#KERNEL_TOOLCHAIN_PREFIX := arm-linux-androideabi-
+#TARGET_KERNEL_CUSTOM_TOOLCHAIN := arm-linux-androideabi-4.9
+
+# Filesystem (sized to be checked!)
+BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
+BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2576980377
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 11424596623 # (11424613007 - 16384)
+BOARD_CACHEIMAGE_PARTITION_SIZE := 260046848
+BOARD_PERSISTIMAGE_PARTITION_SIZE := 28311552
+
+TARGET_USERIMAGES_USE_EXT4 := true
+
+# Init
+TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
+
+# Qualcomm support
+BOARD_USES_QCOM_HARDWARE := true
+BOARD_USES_QC_TIME_SERVICES := true
+TARGET_POWERHAL_VARIANT := qcom
+
+# RIL
+TARGET_RIL_VARIANT := caf
+
+# Adreno
+HAVE_ADRENO_SOURCE:= false
+OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := Aquaris_X5_Plus,gohan
 
 # Audio
-AUDIO_FEATURE_ENABLED_ACDB_LICENSE := true
-AUDIO_FEATURE_ENABLED_DS2_DOLBY_DAP := true
-AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
-AUDIO_FEATURE_ENABLED_KPI_OPTIMIZE := true
+BOARD_USES_ALSA_AUDIO := true
+USE_CUSTOM_AUDIO_POLICY := 0
+BOARD_SUPPORTS_SOUND_TRIGGER := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
+AUDIO_FEATURE_ENABLED_KPI_OPTIMIZE := true
+AUDIO_FEATURE_ENABLED_NEW_SAMPLE_RATE := true
+AUDIO_FEATURE_ENABLED_DS2_DOLBY_DAP := true
+AUDIO_FEATURE_ENABLED_ACDB_LICENSE := true
+AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
 AUDIO_FEATURE_ENABLED_SOURCE_TRACKING := true
 AUDIO_FEATURE_ENABLED_VOICE_CONCURRENCY := true
 AUDIO_USE_LL_AS_PRIMARY_OUTPUT := true
-BOARD_USES_ALSA_AUDIO := true
-USE_CUSTOM_AUDIO_POLICY := 1
 
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
@@ -71,37 +127,28 @@ QCOM_BT_USE_SMD_TTY := true
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
+#BOARD_QTI_CAMERA_32BIT_ONLY := true
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
-
-# CMHW
-BOARD_USES_CYANOGEN_HARDWARE := true
-BOARD_HARDWARE_CLASS += hardware/cyanogen/cmhw
-TARGET_TAP_TO_WAKE_NODE := "/sys/devices/soc.0/7af6000.i2c/i2c-6/6-0020/input/input0/wake_gesture"
 
 # CNE
 BOARD_USES_QCNE := true
 TARGET_LDPRELOAD := libNimsWrap.so
 
-# Dex pre-opt to speed up initial boot
-ifeq ($(HOST_OS),linux)
-  ifneq ($(TARGET_BUILD_VARIANT),eng)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-    endif
-  endif
-endif
-WITH_DEXPREOPT_BOOT_IMG_ONLY ?= true
+# Crypto
+TARGET_HW_DISK_ENCRYPTION := true
+TARGET_KEYMASTER_WAIT_FOR_QSEE := true
+TARGET_CRYPTFS_HW_PATH := device/bq/gohan/cryptfs_hw
 
 # Display
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_ION := true
-TARGET_USES_OVERLAY := true
+TARGET_CONTINUOUS_SPLASH_ENABLED := true
+TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
+#TARGET_USES_OVERLAY := true
 USE_OPENGL_RENDERER := true
-
 
 # Shader cache config options
 # Maximum size of the  GLES Shaders that can be cached for reuse.
@@ -113,30 +160,10 @@ MAX_EGL_CACHE_KEY_SIZE := 12*1024
 # of the device.
 MAX_EGL_CACHE_SIZE := 2048*1024
 
-OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
-
-# Encryption
-TARGET_HW_DISK_ENCRYPTION := true
-
-# Filesystem
-BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
-BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
-BOARD_CACHEIMAGE_PARTITION_SIZE := 260046848
-BOARD_PERSISTIMAGE_PARTITION_SIZE := 28311552
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2576980377
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 11424596623 # (11424613007 - 16384)
-
-# FM
-TARGET_QCOM_NO_FM_FIRMWARE := true
-
 # GPS
 USE_DEVICE_SPECIFIC_GPS := true
 USE_DEVICE_SPECIFIC_LOC_API := true
 TARGET_NO_RPC := true
-
-# Init
-TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 
 # Keymaster
 TARGET_PROVIDES_KEYMASTER := true
@@ -145,47 +172,78 @@ TARGET_PROVIDES_KEYMASTER := true
 TARGET_PROVIDES_LIBLIGHT := true
 
 # Malloc
-MALLOC_IMPL := dlmalloc
+MALLOC_SVELTE := true
+
+# Media
+#TARGET_HAVE_SIGNED_VENUS_FW := true
+
+# Peripheral manager
+TARGET_PER_MGR_ENABLED := true
+
+# Sensors
+USE_SENSOR_MULTI_HAL := true
+
+# Wifi
+BOARD_HAS_QCOM_WLAN         := true
+BOARD_HAS_QCOM_WLAN_SDK     := true
+BOARD_WLAN_DEVICE           := qcwcn
+BOARD_HOSTAPD_DRIVER        := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+WIFI_DRIVER_FW_PATH_AP      := "ap"
+WIFI_DRIVER_FW_PATH_STA     := "sta"
+WPA_SUPPLICANT_VERSION      := VER_0_8_X
+TARGET_USES_QCOM_WCNSS_QMI  := true
+WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/wlan.ko"
+WIFI_DRIVER_MODULE_NAME     := "wlan"
+
+# FM
+TARGET_QCOM_NO_FM_FIRMWARE := true
 
 # NFC
 BOARD_NFC_CHIPSET := pn547
 BOARD_NFC_DEVICE := "/dev/pn547"
 
-# Peripheral manager
-TARGET_PER_MGR_ENABLED := true
+# CMHW
+BOARD_HARDWARE_CLASS += hardware/cyanogen/cmhw
+BOARD_USES_CYANOGEN_HARDWARE := true
+TARGET_TAP_TO_WAKE_NODE := "/sys/devices/soc.0/7af6000.i2c/i2c-6/6-0020/input/input0/wake_gesture"
 
-# Power
-TARGET_POWERHAL_VARIANT := qcom
+# Dex pre-opt to speed up initial boot
+ifeq ($(HOST_OS),linux)
+  ifneq ($(TARGET_BUILD_VARIANT),eng)
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT := true
+    endif
+  endif
+endif
+WITH_DEXPREOPT_BOOT_IMG_ONLY ?= true
 
-# Qualcomm
-BOARD_USES_QCOM_HARDWARE := true
-BOARD_USES_QC_TIME_SERVICES := true
+# Twrp
+#RECOVERY_VARIANT := twrp
+ifeq ($(RECOVERY_VARIANT),twrp)
+TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/twrp/fstab.qcom
+BOARD_HAS_NO_REAL_SDCARD := true
+TW_THEME := portrait_hdpi
+RECOVERY_SDCARD_ON_DATA := true
+TARGET_RECOVERY_QCOM_RTC_FIX := true
+TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
+TW_EXTRA_LANGUAGES := true
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_NTFS_3G := true
+else
+TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/rootdir/fstab.qcom
+endif
 
 # Recovery
 TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/rootdir/etc/fstab.qcom
 TARGET_USERIMAGES_USE_EXT4 := true
-
-# RIL
-TARGET_RIL_VARIANT := caf
+TARGET_USERIMAGES_USE_F2FS := true
 
 # SELinux
-include device/qcom/sepolicy/sepolicy.mk
 BOARD_SEPOLICY_DIRS += $(LOCAL_PATH)/sepolicy
-
-# Wifi
-WPA_SUPPLICANT_VERSION      := VER_0_8_X
-BOARD_HAS_QCOM_WLAN         := true
-BOARD_HAS_QCOM_WLAN_SDK     := true
-BOARD_WLAN_DEVICE           := qcwcn
-BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
-BOARD_HOSTAPD_DRIVER        := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
-TARGET_USES_QCOM_WCNSS_QMI  := true
-WIFI_DRIVER_FW_PATH_AP      := "ap"
-WIFI_DRIVER_FW_PATH_STA     := "sta"
-WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/wlan.ko"
-WIFI_DRIVER_MODULE_NAME     := "wlan"
+include device/qcom/sepolicy/sepolicy.mk
 
 # inherit from the proprietary version
 -include vendor/bq/gohan/BoardConfigVendor.mk
