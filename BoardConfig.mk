@@ -45,6 +45,10 @@ TARGET_KERNEL_CROSS_COMPILE_PREFIX := $(PWD)/prebuilts/gcc/linux-x86/arm/arm-eab
 TARGET_KERNEL_CONFIG := gohan_defconfig
 TARGET_KERNEL_SOURCE := kernel/bq/msm8976
 
+# HIDL
+DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/manifest.xml
+TARGET_FS_CONFIG_GEN += $(LOCAL_PATH)/config.fs
+
 # Assert
 TARGET_OTA_ASSERT_DEVICE := Aquaris_X5_Plus,gohan
 
@@ -112,8 +116,8 @@ USE_PREFERRED_CAMERA_FORMAT := true
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
 
-# CMHW
-BOARD_HARDWARE_CLASS := device/bq/gohan/cmhw/src
+# LineageHW
+BOARD_HARDWARE_CLASS := device/bq/gohan/lineagehw/src
 TARGET_TAP_TO_WAKE_NODE := "/sys/devices/soc.0/7af6000.i2c/i2c-6/6-0020/input/input0/wake_gesture"
 
 # CNE
