@@ -254,25 +254,7 @@ on fs
 
     mount_all fstab.qcom
 
-    # Keeping following partitions outside fstab file. As user may not have
-    # these partition flashed on the device. Failure to mount any partition in fstab file
-    # results in failure to launch late-start class.
-
-    wait /dev/block/bootdevice/by-name/cache
-    mount ext4 /dev/block/bootdevice/by-name/cache /cache nosuid nodev barrier=1
-
-    wait /dev/block/bootdevice/by-name/persist
-    mount ext4 /dev/block/bootdevice/by-name/persist /persist nosuid nodev barrier=1
     mkdir /persist/data 0700 system system
-    restorecon_recursive /persist
-
-    wait /dev/block/bootdevice/by-name/dsp
-    mount ext4 /dev/block/bootdevice/by-name/dsp /dsp nosuid nodev barrier=1
-    restorecon_recursive   /dsp
-
-    wait /dev/block/bootdevice/by-name/modem
-    mount vfat /dev/block/bootdevice/by-name/modem /firmware ro context=u:object_r:firmware_file:s0,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
-    #write /sys/kernel/boot_adsp/boot 1
 
 on post-fs
     # Support legacy paths
@@ -472,12 +454,6 @@ on property:init.svc.wpa_supplicant=stopped
 on property:bluetooth.isEnabled=true
     write /sys/class/bluetooth/hci0/idle_timeout 7000
 
-on property:bluetooth.dun.status=running
-    start bt-dun
-
-on property:bluetooth.dun.status=stopped
-    stop bt-dun
-
 on property:ro.bluetooth.ftm_enabled=true
     start ftmd
 
@@ -493,11 +469,6 @@ on property:persist.env.fastdorm.enabled=true
 service cnd /system/bin/cnd
     class main
     socket cnd stream 660 root inet
-
-service dpmd /system/bin/dpmd
-    class main
-    socket dpmd stream 660 root system
-    group system readproc
 
 # FM enable/disable triggers
 on property:hw.fm.init=1
@@ -544,13 +515,6 @@ on property:bluetooth.hciattach=true
 
 on property:bluetooth.hciattach=false
     setprop bluetooth.status off
-
-service bt-dun /system/bin/dun-server /dev/smd7 /dev/rfcomm0
-    class late_start
-    user bluetooth
-    group bluetooth net_bt_admin inet
-    disabled
-    oneshot
 
 service port-bridge /system/bin/port-bridge /dev/mhi_pipe_32 /dev/ttyGS0
     class main
@@ -655,7 +619,7 @@ on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
-service ril-daemon1 /system/bin/rild -c 2
+service ril-daemon2 /system/bin/rild -c 2
     class main
     user root
     group radio cache inet misc audio log readproc wakelock sdcard_r sdcard_rw net_raw
@@ -726,7 +690,7 @@ on property:init.svc.per_mgr=running
 on property:sys.shutdown.requested=*
     stop per_proxy
 
-service ppd /system/vendor/bin/mm-pp-daemon
+service ppd /vendor/bin/mm-pp-daemon
     class late_start
     disabled
     user system
@@ -815,7 +779,7 @@ service qseecomd /system/bin/qseecomd
    user root
    group root
 
-service perfd /system/vendor/bin/perfd
+service perfd /vendor/bin/perfd
    class main
    user root
    disabled

@@ -120,10 +120,10 @@ USE_PREFERRED_CAMERA_FORMAT := true
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
 WITH_LINEAGE_CHARGER := false
-BOARD_HAL_STATIC_LIBRARIES := libhealthd.gohan
+#BOARD_HAL_STATIC_LIBRARIES := libhealthd.gohan
 
 # LineageHW
-BOARD_HARDWARE_CLASS := device/bq/gohan/lineagehw/src
+BOARD_HARDWARE_CLASS := $(DEVICE_PATH)/lineagehw
 TARGET_TAP_TO_WAKE_NODE := "/sys/devices/soc.0/7af6000.i2c/i2c-6/6-0020/input/input0/wake_gesture"
 
 # CNE
@@ -134,6 +134,7 @@ ifeq ($(HOST_OS),linux)
   ifneq ($(TARGET_BUILD_VARIANT),eng)
     ifeq ($(WITH_DEXPREOPT),)
       WITH_DEXPREOPT := true
+      WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
     endif
   endif
 endif
@@ -213,6 +214,8 @@ BOARD_USES_QC_TIME_SERVICES := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/fstab.qcom
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_USERIMAGES_USE_EXT4 := true
+TARGET_USERIMAGES_USE_F2FS := true
+
 
 # RIL
 TARGET_RIL_VARIANT := caf
