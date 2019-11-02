@@ -26,8 +26,12 @@
  */
 
 #include <sys/sysinfo.h>
+#include <android-base/logging.h>
+#include <android-base/properties.h>
 
 #include "property_service.h"
+
+using android::init::property_set;
 
 char const *heapstartsize;
 char const *heapgrowthlimit;
