@@ -661,11 +661,6 @@ service ril-daemon1 /system/bin/rild -c 2
     group radio cache inet misc audio log readproc wakelock sdcard_r sdcard_rw net_raw
     capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
 
-service charger /charger
-    class charger
-    group graphics system
-    seclabel u:r:healthd:s0
-
 service hvdcp /system/bin/hvdcp
     class main
     user root

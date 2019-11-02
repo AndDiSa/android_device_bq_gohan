@@ -117,6 +117,8 @@ USE_PREFERRED_CAMERA_FORMAT := true
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
+WITH_LINEAGE_CHARGER := false
+BOARD_HAL_STATIC_LIBRARIES := libhealthd.gohan
 
 # LineageHW
 BOARD_HARDWARE_CLASS := device/bq/gohan/lineagehw/src
