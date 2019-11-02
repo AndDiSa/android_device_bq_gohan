@@ -274,18 +274,20 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
     hostapd_default.conf \
     hostapd \
+    wpa_supplicant \
+    libwa_client \
     wificond \
     wifilogd \
-    wpa_supplicant \
     wpa_supplicant.conf
 
-PRODUCT_PACKAGES += \
-    p2p_supplicant_overlay.conf \
-    wpa_supplicant_overlay.conf
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/wifi/hostapd.accept:system/etc/hostapd/hostapd.accept \
+    $(LOCAL_PATH)/wifi/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf \
+    $(LOCAL_PATH)/wifi/hostapd.deny:system/etc/hostapd/hostapd.deny \
+    $(LOCAL_PATH)/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
+    $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf
 
 PRODUCT_PACKAGES += \
-    libqsap_sdk \
-    libwpa_client \
     wcnss_service
 
 # WCNSS
