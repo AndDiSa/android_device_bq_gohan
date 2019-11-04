@@ -1,1 +1,7 @@
 allow init proc:lnk_file { setattr };
+allow init debugfs:dir mounton;
+allow init per_mgr:binder { call transfer };
+allow init persist_file:file append;
+allow init persist_file:filesystem { relabelfrom relabelto };
+allow init pstorefs:dir mounton;
+allow init servicemanager:binder call;
