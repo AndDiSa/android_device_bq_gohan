@@ -85,6 +85,13 @@ AUDIO_USE_LL_AS_PRIMARY_OUTPUT := true
 TARGET_USES_QCOM_MM_AUDIO := true
 BOARD_USES_ALSA_AUDIO := true
 
+BOARD_USES_SRS_TRUEMEDIA := false
+DTS_CODEC_M_ := true
+# Sound trigger is enabled in stock, but header files are missing
+BOARD_SUPPORTS_SOUND_TRIGGER := false
+MM_AUDIO_ENABLED_FTM := true
+MM_AUDIO_ENABLED_SAFX := true
+
 USE_CUSTOM_AUDIO_POLICY := 1
 USE_XML_AUDIO_POLICY_CONF := 1
 
