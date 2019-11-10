@@ -152,7 +152,6 @@ PRODUCT_PACKAGES += \
     copybit.msm8952 \
     hwcomposer.msm8952 \
     memtrack.msm8952 \
-    libdisplayconfig \
     libgenlock \
     liboverlay \
     libqdMetaData.system
@@ -238,9 +237,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     lights.msm8952
 
-# Livedisplay
-PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@1.0-service-legacymm
+## Livedisplay
+#PRODUCT_PACKAGES += \
+#    vendor.lineage.livedisplay@1.0-service-legacymm
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -339,13 +338,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory
 
-# Vendor security patch level
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.lineage.build.vendor_security_patch=2016-12-01
-
-# VR
-PRODUCT_PACKAGES += \
-    vr.msm8952
+## VR
+#PRODUCT_PACKAGES += \
+#    vr.msm8952
 
 # Whitelisted app
 PRODUCT_COPY_FILES += \
@@ -373,9 +368,3 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/WCNSS_cfg.dat:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/wlan/prima/WCNSS_cfg.dat \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini
 
-
-PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
-
-# Model is set via init library
-PRODUCT_SYSTEM_PROPERTY_BLACKLIST := \
-    ro.product.model
